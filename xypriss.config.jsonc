@@ -1,0 +1,15 @@
+{
+  "$internal": {
+    "xyphra": {
+      "type": "plugin",
+      "permissions": {
+        "allowedHooks": [
+          "PLG.HTTP.ON_REQUEST",
+          "PLG.HTTP.ON_RESPONSE",
+          "PLG.SECURITY.ACCESS_SENSITIVE_DATA",
+        ],
+        "policy": "allow",
+      },
+    },
+  },
+}
