@@ -1,20 +1,37 @@
 {
   "name": "xyphra",
   "version": "1.0.0",
-  "description": "Native, secure request logger middleware for XyPriss",
+  "description": "High-performance, secure request logger middleware for XyPriss G3.",
   "author": "Nehonix-Team",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "pluginType": "NETWORK",
+  "files": [
+    "dist/",
+    "README.md",
+    "xypriss.config.jsonc",
+    "xypriss.plugin.xsig"
+  ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsc -w"
+    "prepublishOnly": "xfpm run build && xfpm sign ./ --min-version 1.0.0"
+  },
+  "keywords": [
+    "xypriss",
+    "xypriss-plugin",
+    "logger",
+    "morgan",
+    "security",
+    "zero-trust",
+    "high-performance"
+  ],
+  "peerDependencies": {
+    "xypriss": ">=9.7.0"
   },
   "devDependencies": {
-    "@types/node": "^25.6.0",
-    "typescript": "^6.0.3",
-    "xypriss": "^9.7.8"
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "xypriss": "^9.7.7"
   }
 }
