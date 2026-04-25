@@ -34,9 +34,9 @@ In your `xypriss.config.jsonc`, grant the necessary permissions:
     "xyphra": {
       "permissions": {
         "allowedHooks": [
-          "PLG.HTTP.ON_REQUEST",
-          "PLG.HTTP.ON_RESPONSE",
-          "PLG.SECURITY.ACCESS_SENSITIVE_DATA",
+          "XHS.HOOK.HTTP.REQUEST",
+          "XHS.HOOK.HTTP.RESPONSE",
+          "XHS.PERM.SECURITY.SENSITIVE_DATA",
         ],
         "policy": "allow",
       },

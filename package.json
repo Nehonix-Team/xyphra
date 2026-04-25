@@ -1,6 +1,6 @@
 {
   "name": "xyphra",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "High-performance, secure request logger middleware for XyPriss G3.",
   "author": "Nehonix-Team",
   "license": "MIT",
