@@ -59,7 +59,7 @@ Then, register the plugin using one of the two standard methods:
 
 ```typescript
 import { createServer } from "xypriss";
-import { xyphraPlugin } from "xyphra";
+import { XyphraPlugin } from "xyphra";
 
 const server = createServer({
   plugins: {
@@ -82,10 +82,10 @@ const server = createServer({
 
 ```typescript
 import { Plugin } from "xypriss";
-import { xyphraPlugin } from "xyphra";
+import { XyphraPlugin } from "xyphra";
 
 Plugin.exec(
-  xyphraPlugin({
+  XyphraPlugin({
     format: "json",
     anonymizeIp: true,
     redactHeaders: ["authorization", "cookie"],
