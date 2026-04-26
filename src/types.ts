@@ -57,7 +57,11 @@ export type TokenName =
   | "req[header]"
   | "res[header]";
 
-export type TokenFunction = (req: XyPrisRequest, res: XyPrisResponse, arg?: string) => string;
+export type TokenFunction = (
+  req: XyPrisRequest,
+  res: XyPrisResponse,
+  arg?: string,
+) => string;
 
 // ── Rotation Options ──────────────────────────────────────────────────────────
 
@@ -123,7 +127,10 @@ export interface XyphraOptions extends SanitizeOptions {
   /** Output stream, defaults to process.stdout */
   stream?: NodeJS.WritableStream | { write: (str: string) => void };
   /** Skip logging for certain requests */
-  skip?: (req: XyPrisRequest, res: XyPrisResponse) => boolean | Promise<boolean>;
+  skip?: (
+    req: XyPrisRequest,
+    res: XyPrisResponse,
+  ) => boolean | Promise<boolean>;
   /** Log immediately on request instead of on response finish */
   immediate?: boolean;
   /** Minimum log level */
@@ -170,6 +177,11 @@ export interface XyphraPluginHooks {
     next: NextFunction,
   ) => void;
   onResponse: (req: XyPrisRequest, res: XyPrisResponse) => void;
+  onResponseTime: (
+    responseTime: number,
+    req: XyPrisRequest,
+    res: XyPrisResponse,
+  ) => void;
 }
 
 // ── Module Augmentation ───────────────────────────────────────────────────────
@@ -179,5 +191,6 @@ declare module "xypriss" {
     _xyphraStartAt?: [number, number];
     _xyphraStartDate?: Date;
     _xyphraReqId?: string;
+    _xyphraLogged?: boolean;
   }
 }

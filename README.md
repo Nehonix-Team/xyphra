@@ -8,6 +8,14 @@
 - **Security-First**: Redact sensitive headers (Authorized, Cookies, etc.) automatically.
 - **GDPR Compliant**: One-click IP anonymization.
 - **Hybrid Architecture**: Use it as a XyPriss Plugin (Lifecycle integrated) or as a standard middleware.
+
+## Security & Required Permissions (XHS G3)
+
+Xyphra operates under a strict Zero-Trust model. To ensure full visibility and accurate telemetry, you **must** grant the following permissions in your `xypriss.config.jsonc`:
+
+- `XHS.PERM.SECURITY.SENSITIVE_DATA`: **Critical.** Grants access to request headers (`User-Agent`, `Referer`). Note: Standard headers like `Host` and `Content-Type` are visible by default through selective masking, but full identification requires this permission.
+- `XHS.PERM.HTTP.GLOBAL_MIDDLEWARE`: Required to hook into the global request/response stream via `server.app.use()`.
+- `XHS.HOOK.HTTP.ON_RESPONSE`: Required for lifecycle-integrated logging (triggered at the end of every response).
 - **Strictly Typed**: Full TypeScript support with detailed request timing.
 
 ## Developer Identity (G3 Security)

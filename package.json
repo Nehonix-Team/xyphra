@@ -26,12 +26,10 @@
     "zero-trust",
     "high-performance"
   ],
-  "peerDependencies": {
-    "xypriss": ">=9.7.0"
-  },
+
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0",
-    "xypriss": "^9.7.7"
+    "xypriss": "file:../../"
   }
 }

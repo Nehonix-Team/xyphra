@@ -13,6 +13,7 @@ import {
   ColorTheme,
   TokenFunction,
 } from "./types.js";
+import {ID} from "nehoid"
 
 // ── ANSI Helpers ──────────────────────────────────────────────────────────────
 
@@ -161,10 +162,16 @@ function maskQueryParams(url: string, params: string[]): string {
   }
 }
 
-// ── UUID (tiny, no dep) ───────────────────────────────────────────────────────
+function formatBytes(bytes: number | string): string {
+  const b = __sys__.utils.num.formatBytes(Number(bytes));
+  const r = b.toLowerCase().includes("nan") ? "-" : b;
+  return r;
+}
+
+// ── UUID (tiny, dep:NehoID) ───────────────────────────────────────────────────────
 
 function shortId(): string {
-  return Math.random().toString(36).slice(2, 10);
+  return ID.generate({format: "cuid"})
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -255,7 +262,9 @@ export class XyphraCore {
   // ── IP ─────────────────────────────────────────────────────────────────────
 
   private _resolveIp(req: any): string {
-    let ip: string = getIp(req) ?? req.socket?.remoteAddress ?? "unknown";
+    const rawIp: any = getIp(req) ?? req.socket?.remoteAddress ?? "unknown";
+    let ip: string =
+      typeof rawIp === "object" ? (rawIp.ip ?? "unknown") : String(rawIp);
     if (this.options.anonymizeIp) ip = anonymizeIp(ip);
     return ip;
   }
@@ -269,7 +278,6 @@ export class XyphraCore {
     if (this.options.redactHeaders?.includes(key)) return "[REDACTED]";
     return Array.isArray(val) ? val.join(", ") : String(val);
   }
-
 
   // ── URL Sanitize ───────────────────────────────────────────────────────────
 
@@ -288,7 +296,14 @@ export class XyphraCore {
 
   private _responseTime(req: any): string {
     const start = req._xyphraStartAt;
-    if (!start) return "-";
+    if (!start) {
+      if (req._xyphraStartDate) {
+        return (new Date().getTime() - req._xyphraStartDate.getTime()).toFixed(
+          3,
+        );
+      }
+      return "-";
+    }
     const diff = process.hrtime(start);
     return (diff[0] * 1e3 + diff[1] * 1e-6).toFixed(3);
   }
@@ -345,7 +360,9 @@ export class XyphraCore {
       method: req.method ?? "-",
       url: this._sanitizeUrl(req),
       status,
-      contentLength: typeof cl === "object" && Array.isArray(cl) ? cl[0] : cl,
+      contentLength: formatBytes(
+        typeof cl === "object" && Array.isArray(cl) ? cl[0] : cl,
+      ),
       responseTime: rt,
       httpVersion: req.httpVersion ?? "1.1",
       referrer: this._header(req, "referer"),
@@ -353,7 +370,6 @@ export class XyphraCore {
       requestId: req._xyphraReqId,
     };
   }
-
 
   // ── Format: pretty ────────────────────────────────────────────────────────
 
@@ -448,7 +464,7 @@ export class XyphraCore {
 
     // level filter
     if (
-      LOG_LEVEL_PRIORITY[entry.level as LogLevel] <
+      LOG_LEVEL_PRIORITY[entry.level as LogLevel] >
       LOG_LEVEL_PRIORITY[this.level]
     )
       return;
@@ -566,18 +582,29 @@ export class XyphraCore {
   // ── Public: Middleware ────────────────────────────────────────────────────
 
   public middleware() {
-    return (req: Request, res: Response, next: () => void) => {
+    return (req: any, res: any, next: () => void) => {
       req._xyphraStartAt = process.hrtime();
       req._xyphraStartDate = new Date();
       if (!req._xyphraReqId) req._xyphraReqId = shortId();
 
       if (this.options.immediate) {
-        this._log(req, res).catch(() => {});
+        this._doLog(req, res);
       } else {
-        res.on("finish", () => this._log(req, res).catch(() => {}));
+        const doLog = () => {
+          this._doLog(req, res);
+        };
+
+        res.on("finish", doLog);
+        res.on("close", doLog);
       }
       next();
     };
+  }
+
+  private _doLog(req: any, res: any) {
+    if (req._xyphraLogged) return;
+    req._xyphraLogged = true;
+    this._log(req, res).catch(() => {});
   }
 
   // ── Public: Plugin Hooks ──────────────────────────────────────────────────
@@ -588,11 +615,14 @@ export class XyphraCore {
         req._xyphraStartAt = process.hrtime();
         req._xyphraStartDate = new Date();
         if (!req._xyphraReqId) req._xyphraReqId = shortId();
-        if (this.options.immediate) this._log(req, res).catch(() => {});
+        if (this.options.immediate) this._doLog(req, res);
         next();
       },
       onResponse: (req: Request, res: Response) => {
-        if (!this.options.immediate) this._log(req, res).catch(() => {});
+        if (!this.options.immediate) this._doLog(req, res);
+      },
+      onResponseTime: (rt: number, req: Request, res: Response) => {
+        if (!this.options.immediate) this._doLog(req, res);
       },
     };
   }

@@ -4,21 +4,16 @@
 
 import { XyphraMeta, XyphraOptions } from "./types.js";
 import { XyphraCore } from "./Xyphra.js";
-import { Plugin } from "xypriss";
+import { Plugin, Request, Response, NextFunction,  } from "xypriss";
 
 // ── XyPriss G3 Plugin ─────────────────────────────────────────────────────────
 
 /**
  * Official way to use Xyphra in XyPriss G3.
- *
- * @example
- * ```ts
- * app.use(XyphraPlugin({ format: "pretty", metrics: true }));
- * ```
  */
 export function XyphraPlugin(options: XyphraOptions = {}) {
   const core = new XyphraCore(options);
-  const hooks = core.getPluginHooks();
+  const coreHooks = core.getPluginHooks();
   const meta = Plugin.manifest<XyphraMeta>(__sys__);
 
   return Plugin.create(
@@ -27,12 +22,40 @@ export function XyphraPlugin(options: XyphraOptions = {}) {
       version: meta.version,
       description: meta.description,
       type: meta.pluginType,
-      onRequest: hooks.onRequest,
-      onResponse: hooks.onResponse,
-      onServerStart(server) {
+
+
+      // Lifecycle Hooks Verification
+      onRequest(req: Request, res: Response, next: NextFunction) {
+        try {
+          return coreHooks.onRequest(req, res, next);
+        } catch (e: any) {
+          // console.error(`[XYPHRA-HOOK] error whi ERROR: ${e.message}`);
+          next();
+        }
+      },
+
+      onResponse(req: Request, res: Response) {
+        try {
+          return coreHooks.onResponse(req, res);
+        } catch (e: any) {
+          // console.error(`[XYPHRA-HOOK] onResponse ERROR: ${e.message}`);
+        }
+      },
+
+      onServerStart(server: any) {
+        // console.log("[XYPHRA-HOOK] onServerStart triggered");
         server.app.use(core.middleware());
       },
-    },
+
+      onServerReady() {
+        // console.log("[XYPHRA-HOOK] onServerReady triggered");
+      },
+
+      onResponseTime(rt: number, req: Request, res: Response) {
+        // console.log(`[XYPHRA-HOOK] onResponseTime triggered: ${rt}ms`);
+        return coreHooks.onResponseTime(rt, req, res);
+      },
+    } as any,
     (globalThis as any).__sys__.__root__,
   );
 }
@@ -41,12 +64,6 @@ export function XyphraPlugin(options: XyphraOptions = {}) {
 
 /**
  * Bare middleware factory
- *
- * @example
- * ```ts
- * app.use(xyphraMiddleware("dev"));
- * app.use(xyphraMiddleware({ format: "json", anonymizeIp: true }));
- * ```
  */
 export function xyphraMiddleware(
   format: string | XyphraOptions = "combined",
@@ -60,13 +77,6 @@ export function xyphraMiddleware(
 
 /**
  * Standalone middleware that attaches a short unique ID (`req._xyphraReqId`)
- * to every request. Call BEFORE `xyphraMiddleware` if you want IDs in logs.
- *
- * @example
- * ```ts
- * app.use(xyphraRequestId());
- * app.use(xyphraMiddleware("pretty"));
- * ```
  */
 export function xyphraRequestId(options: XyphraOptions = {}) {
   return new XyphraCore(options).requestId();
@@ -74,15 +84,6 @@ export function xyphraRequestId(options: XyphraOptions = {}) {
 
 // ── Skip Helpers ──────────────────────────────────────────────────────────────
 
-/**
- * Pre-built skip function that silences logging for the given URL paths.
- * Useful for health-check endpoints that would pollute logs.
- *
- * @example
- * ```ts
- * xyphraMiddleware({ skip: Xyphra.skipPaths("/health", "/ping") })
- * ```
- */
 export const { skipPaths } = XyphraCore;
 export { paint } from "./Xyphra.js";
 
