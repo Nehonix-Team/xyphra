@@ -13,10 +13,6 @@
     "xypriss.config.jsonc",
     "xypriss.plugin.xsig"
   ],
-  "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "xfpm run build && xfpm sign ./ --min-version 1.0.0"
-  },
   "keywords": [
     "xypriss",
     "xypriss-plugin",
@@ -26,16 +22,9 @@
     "zero-trust",
     "high-performance"
   ],
-  "xfpm": {
-    "permissions": [
-      "XHS.HOOK.HTTP.REQUEST",
-      "XHS.HOOK.HTTP.RESPONSE",
-      "XHS.HOOK.LIFECYCLE.SERVER_START",
-      "XHS.HOOK.LIFECYCLE.SERVER_READY",
-      "XHS.HOOK.HTTP.REQUEST",
-      "XHS.HOOK.HTTP.RESPONSE",
-      "XHS.PERM.SECURITY.SENSITIVE_DATA"
-    ]
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "xfpm run build \u0026\u0026 xfpm sign ./ --min-version 1.0.0 --fix"
   },
   "dependencies": {
     "xypriss": "^9.9.0"
@@ -43,5 +32,14 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0"
+  },
+  "xfpm": {
+    "permissions": [
+      "XHS.HOOK.HTTP.REQUEST",
+      "XHS.HOOK.HTTP.RESPONSE",
+      "XHS.HOOK.LIFECYCLE.SERVER_START",
+      "XHS.HOOK.LIFECYCLE.SERVER_READY",
+      "XHS.PERM.SECURITY.SENSITIVE_DATA"
+    ]
   }
 }
