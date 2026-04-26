@@ -1,10 +1,11 @@
 --- XYPRISS SIGNATURE (G3) ---
-Manifest: xyphra@1.0.1
+Manifest: xyphra@1.0.2
 Min-Engine: 1.0.0
-Fingerprint: sha256:f58b0217f99aae259a1864ede6349635625e724c1554209f2c3e6e8cce465946
+Fingerprint: sha256:6a61781327a5c6da6faab2c435110cddac4db895bdd0e02a22a9f22034af5f33
 Identity: ed25519:a58b17a3e46302dd3ae5538bc9b8b991c57f4c5fe2e7d8ac41803de818d947f4
-Expires: 2027-04-25T22:23:46Z
+Privileges: none
+Expires: 2027-04-26T12:20:26Z
 Revision: sha256:none
 --- BEGIN CRYPTOGRAPHIC PROOF ---
-base64:nprksOWah0VeZKjF3J2SJswRc8MUOyRDgVRv6Q+dSjuNyRgAaMhr0G9q1JDePQhhFw/tWnxNLpXHdDgyQ4zTAQ==
+base64:Qy/P9o+rv2nD7lqEiSKtNdeQL12sw2YdV65ulinxKQioZZQIAaUpDkFfgck1+ckIW3GijUaM04aaKB7fyS4CBA==
 --- END XYPRISS SIGNATURE ---

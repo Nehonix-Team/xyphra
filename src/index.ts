@@ -4,7 +4,7 @@
 
 import { XyphraMeta, XyphraOptions } from "./types.js";
 import { XyphraCore } from "./Xyphra.js";
-import { Plugin, Request, Response, NextFunction,  } from "xypriss";
+import { Plugin, Request, Response, NextFunction } from "xypriss";
 
 // ── XyPriss G3 Plugin ─────────────────────────────────────────────────────────
 
@@ -22,7 +22,6 @@ export function XyphraPlugin(options: XyphraOptions = {}) {
       version: meta.version,
       description: meta.description,
       type: meta.pluginType,
-
 
       // Lifecycle Hooks Verification
       onRequest(req: Request, res: Response, next: NextFunction) {
@@ -45,6 +44,7 @@ export function XyphraPlugin(options: XyphraOptions = {}) {
       onServerStart(server: any) {
         // console.log("[XYPHRA-HOOK] onServerStart triggered");
         server.app.use(core.middleware());
+        server.app.use(new XyphraCore(options).requestId());
       },
 
       onServerReady() {
@@ -65,21 +65,12 @@ export function XyphraPlugin(options: XyphraOptions = {}) {
 /**
  * Bare middleware factory
  */
-export function xyphraMiddleware(
+export function XyphraMiddleware(
   format: string | XyphraOptions = "combined",
   options: XyphraOptions = {},
 ) {
   const core = new XyphraCore(format, options);
   return core.middleware();
-}
-
-// ── Request-ID Middleware ─────────────────────────────────────────────────────
-
-/**
- * Standalone middleware that attaches a short unique ID (`req._xyphraReqId`)
- */
-export function xyphraRequestId(options: XyphraOptions = {}) {
-  return new XyphraCore(options).requestId();
 }
 
 // ── Skip Helpers ──────────────────────────────────────────────────────────────
@@ -89,5 +80,5 @@ export { paint } from "./Xyphra.js";
 
 // ── Default Export (Hybrid) ───────────────────────────────────────────────────
 
-const xyphra = xyphraMiddleware;
-export default xyphra;
+const Xyphra = XyphraMiddleware;
+export default Xyphra;
