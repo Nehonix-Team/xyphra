@@ -1,6 +1,6 @@
 {
   "name": "xyphra",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "High-performance, secure request logger middleware for XyPriss G3.",
   "author": "Nehonix-Team",
   "license": "MIT",
@@ -26,10 +26,19 @@
     "zero-trust",
     "high-performance"
   ],
-
+  "xfpm": {
+    "permissions": [
+      "XHS.HOOK.HTTP.REQUEST",
+      "XHS.HOOK.HTTP.RESPONSE",
+      "XHS.HOOK.LIFECYCLE.SERVER_START",
+      "XHS.HOOK.LIFECYCLE.SERVER_READY"
+    ]
+  },
+  "dependencies": {
+    "xypriss": "^9.9.0"
+  },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "typescript": "^5.0.0",
-    "xypriss": "file:../../"
+    "typescript": "^5.0.0"
   }
 }

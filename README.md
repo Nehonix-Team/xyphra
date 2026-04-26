@@ -53,17 +53,43 @@ In your `xypriss.config.jsonc`, grant the necessary permissions:
 }
 ```
 
-Then in your server code:
+Then, register the plugin using one of the two standard methods:
+
+#### Method A: Via ServerOptions (Standard)
 
 ```typescript
+import { createServer } from "xypriss";
 import { xyphraPlugin } from "xyphra";
 
-server.register(
+const server = createServer({
+  plugins: {
+    register: [
+            XyphraPlugin({
+                anonymizeIp: true,
+                immediate: false,
+                stream: {
+                    write(str: string) {
+                        console.log(str);
+                    },
+                },
+            }),
+        ],
+  }
+});
+```
+
+#### Method B: Programmatically (Runtime)
+
+```typescript
+import { Plugin } from "xypriss";
+import { xyphraPlugin } from "xyphra";
+
+Plugin.exec(
   xyphraPlugin({
     format: "json",
     anonymizeIp: true,
     redactHeaders: ["authorization", "cookie"],
-  }),
+  })
 );
 ```
 
