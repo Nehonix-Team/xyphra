@@ -42,7 +42,7 @@ export function XyphraPlugin(options: XyphraOptions = {}) {
       },
 
       onServerStart(server: any) {
-        // console.log("[XYPHRA-HOOK] onServerStart triggered");
+        console.log("[XYPHRA-HOOK] onServerStart triggered");
         server.app.use(core.middleware());
         server.app.use(new XyphraCore(options).requestId());
       },
@@ -52,7 +52,7 @@ export function XyphraPlugin(options: XyphraOptions = {}) {
       },
 
       onResponseTime(rt: number, req: Request, res: Response) {
-        // console.log(`[XYPHRA-HOOK] onResponseTime triggered: ${rt}ms`);
+        console.log(`[XYPHRA-HOOK] onResponseTime triggered: ${rt}ms`);
         return coreHooks.onResponseTime(rt, req, res);
       },
     } as any,
