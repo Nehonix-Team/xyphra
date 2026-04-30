@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "xfpm run build \u0026\u0026 xfpm sign ./ --min-version 1.0.0 --fix"
+    "prepublishOnly": "xfpm run build \u0026\u0026 xfpm sign ./ -m 1.0.5 --fix"
   },
   "dependencies": {
     "nehoid": "^2.2.1",
