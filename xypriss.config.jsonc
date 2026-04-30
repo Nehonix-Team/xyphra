@@ -1,15 +1,7 @@
 {
-  "$internal": {
-    "xyphra": {
-      "type": "plugin",
-      "permissions": {
-        "allowedHooks": [
-          "XHS.HOOK.HTTP.REQUEST",
-          "XHS.HOOK.HTTP.RESPONSE",
-          "XHS.PERM.SECURITY.SENSITIVE_DATA",
-        ],
-        "policy": "allow",
-      },
-    },
-  },
+    "$internal": {
+        "$(pkg).name": {
+            "type": "plugin"
+        }
+    }
 }

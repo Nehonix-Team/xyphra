@@ -24,25 +24,26 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "xfpm run build && xfpm sign ./ --min-version 1.0.0 --fix"
+    "prepublishOnly": "xfpm run build \u0026\u0026 xfpm sign ./ --min-version 1.0.0 --fix"
   },
   "dependencies": {
     "nehoid": "^2.2.1",
     "strulink": "^1.2.0"
   },
-  "peerDependencies": {
-    "xypriss": ">= 9.9.4"
-  },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0"
   },
+  "peerDependencies": {
+    "xypriss": "\u003e= 9.9.4"
+  },
   "xfpm": {
     "permissions": [
-      "XHS.HOOK.LIFECYCLE.REGISTER",
+      "XHS.HOOK.HTTP.REQUEST",
       "XHS.HOOK.LIFECYCLE.SERVER_START",
-      "XHS.HOOK.LIFECYCLE.SERVER_STOP",
-      "XHS.HOOK.LIFECYCLE.SERVER_READY"
+      "XHS.HOOK.HTTP.RESPONSE",
+      "XHS.HOOK.METRICS.RESPONSE_TIME",
+      "XHS.PERM.HTTP.GLOBAL_MIDDLEWARE"
     ]
   }
 }
