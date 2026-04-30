@@ -16,12 +16,13 @@ export function XyphraPlugin(options: XyphraOptions = {}) {
   const coreHooks = core.getPluginHooks();
   const meta = Plugin.manifest<XyphraMeta>(__sys__);
 
-  return Plugin.create(
+  const plugin = Plugin.create(
     {
       name: meta.name,
       version: meta.version,
-      description: meta.description,
+      description: meta.description || "Xyphra Logger Plugin",
       type: meta.pluginType,
+      globalMiddleware: true,
 
       // Lifecycle Hooks Verification
       onRequest(req: Request, res: Response, next: NextFunction) {
@@ -42,22 +43,22 @@ export function XyphraPlugin(options: XyphraOptions = {}) {
       },
 
       onServerStart(server: any) {
-        console.log("[XYPHRA-HOOK] onServerStart triggered");
         server.app.use(core.middleware());
         server.app.use(new XyphraCore(options).requestId());
       },
 
-      onServerReady() {
-        // console.log("[XYPHRA-HOOK] onServerReady triggered");
-      },
 
       onResponseTime(rt: number, req: Request, res: Response) {
-        console.log(`[XYPHRA-HOOK] onResponseTime triggered: ${rt}ms`);
         return coreHooks.onResponseTime(rt, req, res);
       },
     } as any,
     (globalThis as any).__sys__.__root__,
   );
+
+  // Inspect the plugin to identify required permissions for package.json
+  // Plugin.inspect(plugin);
+
+  return plugin;
 }
 
 // ── Direct Middleware ───────────────────────────────────────────────
