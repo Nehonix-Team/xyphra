@@ -1,6 +1,6 @@
 {
   "name": "xyphra",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "High-performance, secure request logger middleware for XyPriss G3.",
   "author": "Nehonix-Team",
   "license": "MIT",
@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "xfpm run build \u0026\u0026 xfpm sign ./ -m 1.0.7 --fix"
+    "prepublishOnly": "xfpm run build && xfpm sign ./ -m 1.0.7 --fix"
   },
   "dependencies": {
     "nehoid": "^2.2.1",
@@ -35,7 +35,7 @@
     "typescript": "^5.0.0"
   },
   "peerDependencies": {
-    "xypriss": "\u003e= 9.9.4"
+    "xypriss": ">= 9.9.4"
   },
   "xfpm": {
     "permissions": [
@@ -43,7 +43,8 @@
       "XHS.HOOK.LIFECYCLE.SERVER_START",
       "XHS.HOOK.HTTP.RESPONSE",
       "XHS.HOOK.METRICS.RESPONSE_TIME",
-      "XHS.PERM.HTTP.GLOBAL_MIDDLEWARE"
+      "XHS.PERM.HTTP.GLOBAL_MIDDLEWARE",
+      "XHS.PERM.HTTP.MIDDLEWARE"
     ]
   }
 }

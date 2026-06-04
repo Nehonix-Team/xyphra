@@ -4,7 +4,7 @@
 
 import { XyphraMeta, XyphraOptions } from "./types.js";
 import { XyphraCore } from "./Xyphra.js";
-import { Plugin, Request, Response, NextFunction } from "xypriss";
+import { Plugin, Request, Response, NextFunction, PluginServer } from "xypriss";
  
 // ── XyPriss G3 Plugin ─────────────────────────────────────────────────────────
 
@@ -42,7 +42,7 @@ export function XyphraPlugin(options: XyphraOptions = {}) {
         }
       },
 
-      onServerStart(server: any) {
+      onServerStart(server: PluginServer) {
         server.app.use(core.middleware());
         server.app.use(new XyphraCore(options).requestId());
       },

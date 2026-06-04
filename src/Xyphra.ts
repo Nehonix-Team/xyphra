@@ -2,7 +2,7 @@
 // Xyphra – Core Logger
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { Request, Response, NextFunction, getIp } from "xypriss";
+import { Request, Response, NextFunction, getIp, XyPrisResponse, XyPrisRequest } from "xypriss";
 import {
   XyphraOptions,
   XyphraPluginHooks,
@@ -563,10 +563,11 @@ export class XyphraCore {
 
   // ── Public: Request ID Middleware ─────────────────────────────────────────
 
-  /** Express middleware that attaches a short request ID to every request */
+  /** XyPriss middleware that attaches a short request ID to every request */
   public requestId() {
-    return (req: any, _res: any, next: () => void) => {
+    return (req: XyPrisRequest, _res: XyPrisResponse, next: () => void) => {
       req._xyphraReqId = shortId();
+      _res.setHeader("_xyphra_RId", shortId());
       next();
     };
   }
@@ -582,7 +583,7 @@ export class XyphraCore {
   // ── Public: Middleware ────────────────────────────────────────────────────
 
   public middleware() {
-    return (req: any, res: any, next: () => void) => {
+    return (req: XyPrisRequest, res: XyPrisResponse, next: () => void) => {
       req._xyphraStartAt = process.hrtime();
       req._xyphraStartDate = new Date();
       if (!req._xyphraReqId) req._xyphraReqId = shortId();
@@ -601,7 +602,7 @@ export class XyphraCore {
     };
   }
 
-  private _doLog(req: any, res: any) {
+  private _doLog(req: XyPrisRequest, res: XyPrisResponse) {
     if (req._xyphraLogged) return;
     req._xyphraLogged = true;
     this._log(req, res).catch(() => {});
