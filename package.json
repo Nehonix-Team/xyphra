@@ -1,6 +1,6 @@
 {
   "name": "xyphra",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "High-performance, secure request logger middleware for XyPriss G3.",
   "author": "Nehonix-Team",
   "license": "MIT",
@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "xfpm run build \u0026\u0026 xfpm sign ./ -m 1.0.5 --fix"
+    "prepublishOnly": "xfpm run build \u0026\u0026 xfpm sign ./ -m 1.0.7 --fix"
   },
   "dependencies": {
     "nehoid": "^2.2.1",

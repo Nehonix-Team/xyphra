@@ -5,7 +5,7 @@
 import { XyphraMeta, XyphraOptions } from "./types.js";
 import { XyphraCore } from "./Xyphra.js";
 import { Plugin, Request, Response, NextFunction } from "xypriss";
-
+ 
 // ── XyPriss G3 Plugin ─────────────────────────────────────────────────────────
 
 /**
