@@ -1,6 +1,6 @@
 {
   "name": "xyphra",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "High-performance, secure request logger middleware for XyPriss G3.",
   "author": "Nehonix-Team",
   "license": "MIT",
@@ -27,8 +27,7 @@
     "prepublishOnly": "xfpm run build && xfpm sign ./ -m 1.0.7 --fix"
   },
   "dependencies": {
-    "nehoid": "^2.2.1",
-    "strulink": "^1.2.0"
+    "nehoid": "^2.2.1"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
